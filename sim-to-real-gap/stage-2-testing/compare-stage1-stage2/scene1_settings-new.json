@@ -1,0 +1,2540 @@
+{
+ "graphs": {
+  "/Graph_athena/RTF": {
+   "Context": {
+    "connections": {},
+    "inputs": {
+     "inputs:domain_id": 0,
+     "inputs:useDomainIDEnvVar": true
+    },
+    "type": "isaacsim.ros2.bridge.ROS2Context"
+   },
+   "GenericPublisher": {
+    "connections": {
+     "inputs:context": [
+      "/Graph_athena/RTF/Context.outputs:context"
+     ],
+     "inputs:data": [
+      "/Graph_athena/RTF/RTF.outputs:rtf"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/RTF/OnPlaybackTick.outputs:tick"
+     ]
+    },
+    "inputs": {
+     "inputs:messageName": "Float32",
+     "inputs:messagePackage": "std_msgs",
+     "inputs:messageSubfolder": "msg",
+     "inputs:nodeNamespace": "",
+     "inputs:qosProfile": "",
+     "inputs:queueSize": 10,
+     "inputs:topicName": "topic"
+    },
+    "type": "isaacsim.ros2.bridge.ROS2Publisher"
+   },
+   "OnPlaybackTick": {
+    "connections": {},
+    "inputs": {},
+    "type": "omni.graph.action.OnPlaybackTick"
+   },
+   "RTF": {
+    "connections": {},
+    "inputs": {},
+    "type": "isaacsim.core.nodes.IsaacRealTimeFactor"
+   }
+  },
+  "/Graph_athena/ackermann_athena": {
+   "ackermann_controller": {
+    "connections": {
+     "inputs:acceleration": [
+      "/Graph_athena/ackermann_athena/ros2_subscribe_ackermanndrive.outputs:acceleration"
+     ],
+     "inputs:dt": [
+      "/Graph_athena/ackermann_athena/on_playback_tick.outputs:deltaSeconds"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/ackermann_athena/on_playback_tick.outputs:tick"
+     ],
+     "inputs:speed": [
+      "/Graph_athena/ackermann_athena/ros2_subscribe_ackermanndrive.outputs:speed"
+     ],
+     "inputs:steeringAngle": [
+      "/Graph_athena/ackermann_athena/script_node.outputs:steeringAngleOut"
+     ],
+     "inputs:steeringAngleVelocity": [
+      "/Graph_athena/ackermann_athena/ros2_subscribe_ackermanndrive.outputs:steeringAngleVelocity"
+     ]
+    },
+    "inputs": {
+     "inputs:backWheelRadius": 0.0325,
+     "inputs:frontWheelRadius": 0.0325,
+     "inputs:invertSteering": false,
+     "inputs:maxAcceleration": 1.0,
+     "inputs:maxSteeringAngleVelocity": 1.0,
+     "inputs:maxWheelRotation": 0.7854,
+     "inputs:maxWheelVelocity": 50.0,
+     "inputs:trackWidth": 0.17,
+     "inputs:wheelBase": 0.26
+    },
+    "type": "isaacsim.robot.wheeled_robots.AckermannController"
+   },
+   "articulation_controller": {
+    "connections": {
+     "inputs:execIn": [
+      "/Graph_athena/ackermann_athena/on_playback_tick.outputs:tick"
+     ],
+     "inputs:positionCommand": [
+      "/Graph_athena/ackermann_athena/script_node.outputs:wheelAnglesOut"
+     ]
+    },
+    "inputs": {
+     "inputs:effortCommand": [],
+     "inputs:jointIndices": [],
+     "inputs:jointNames": [
+      "wheel_attachment_front_left_joint",
+      "wheel_attachment_front_right_joint"
+     ],
+     "inputs:robotPath": "",
+     "inputs:targetPrim": [
+      "/World/athena"
+     ],
+     "inputs:velocityCommand": []
+    },
+    "type": "isaacsim.core.nodes.IsaacArticulationController"
+   },
+   "articulation_controller_01": {
+    "connections": {
+     "inputs:execIn": [
+      "/Graph_athena/ackermann_athena/on_playback_tick.outputs:tick"
+     ],
+     "inputs:velocityCommand": [
+      "/Graph_athena/ackermann_athena/ackermann_controller.outputs:wheelRotationVelocity"
+     ]
+    },
+    "inputs": {
+     "inputs:effortCommand": [],
+     "inputs:jointIndices": [],
+     "inputs:jointNames": [
+      "wheel_front_left_joint",
+      "wheel_front_right_joint",
+      "wheel_back_left_joint",
+      "wheel_back_right_joint"
+     ],
+     "inputs:positionCommand": [],
+     "inputs:robotPath": "",
+     "inputs:targetPrim": [
+      "/World/athena"
+     ]
+    },
+    "type": "isaacsim.core.nodes.IsaacArticulationController"
+   },
+   "on_playback_tick": {
+    "connections": {},
+    "inputs": {},
+    "type": "omni.graph.action.OnPlaybackTick"
+   },
+   "ros2_context": {
+    "connections": {},
+    "inputs": {
+     "inputs:domain_id": 0,
+     "inputs:useDomainIDEnvVar": true
+    },
+    "type": "isaacsim.ros2.bridge.ROS2Context"
+   },
+   "ros2_qos_profile": {
+    "connections": {},
+    "inputs": {
+     "inputs:createProfile": "Default for publishers/subscribers",
+     "inputs:deadline": 0.0,
+     "inputs:depth": 10,
+     "inputs:durability": "volatile",
+     "inputs:history": "keepLast",
+     "inputs:leaseDuration": 0.0,
+     "inputs:lifespan": 0.0,
+     "inputs:liveliness": "systemDefault",
+     "inputs:reliability": "reliable"
+    },
+    "type": "isaacsim.ros2.bridge.ROS2QoSProfile"
+   },
+   "ros2_subscribe_ackermanndrive": {
+    "connections": {
+     "inputs:context": [
+      "/Graph_athena/ackermann_athena/ros2_context.outputs:context"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/ackermann_athena/on_playback_tick.outputs:tick"
+     ],
+     "inputs:qosProfile": [
+      "/Graph_athena/ackermann_athena/ros2_qos_profile.outputs:qosProfile"
+     ]
+    },
+    "inputs": {
+     "inputs:nodeNamespace": "",
+     "inputs:queueSize": 10,
+     "inputs:topicName": "ackermann_cmd"
+    },
+    "type": "isaacsim.ros2.bridge.ROS2SubscribeAckermannDrive"
+   },
+   "script_node": {
+    "connections": {
+     "inputs:execIn": [
+      "/Graph_athena/ackermann_athena/on_playback_tick.outputs:tick"
+     ],
+     "inputs:steeringAngleIn": [
+      "/Graph_athena/ackermann_athena/ros2_subscribe_ackermanndrive.outputs:steeringAngle"
+     ]
+    },
+    "inputs": {
+     "inputs:script": "ENABLED = True               # False = pass the command through unchanged (ideal sim)\nGAIN_CMD = 0.86              # gain used in ackermann_to_vesc (servo units per rad)\nMAX_STEERING_ANGLE = 0.25    # rad, clipping in ackermann_to_vesc\nGAIN_LEFT = 0.728            # characteristic from servo calibration (servo units per rad)\nGAIN_RIGHT = 0.755\nBACKLASH_LEFT = 0.026        # backlash towards the left  [servo units]\nBACKLASH_RIGHT = 0.023       # backlash towards the right [servo units]\nREST_POSITION = -0.0043      # rest position of the wheel within the play [servo units]\n                             # (~ -0.006 rad when driving straight, as measured)\nWHEEL_BASE = 0.26            # m, same value as in the Ackermann Controller node\nTRACK_WIDTH = 0.17           # m, same value as in the Ackermann Controller node (check!)\n\nimport math\n\n\ndef setup(db):\n    print(f\"[steering model] enabled={ENABLED} gain_cmd={GAIN_CMD} max={MAX_STEERING_ANGLE} \"\n          f\"gL={GAIN_LEFT} gR={GAIN_RIGHT} bL={BACKLASH_LEFT} bR={BACKLASH_RIGHT} rest={REST_POSITION}\")\n\n\ndef cleanup(db):\n    pass\n\n\ndef compute(db):\n    cmd = db.inputs.steeringAngleIn\n    if not ENABLED:\n        db.outputs.steeringAngleOut = cmd\n        db.outputs.wheelAnglesOut = ackermann_wheel_angles(cmd)\n        return True\n    if not math.isfinite(cmd):\n        cmd = 0.0\n    # 1. Clip and convert to servo travel (same as ackermann_to_vesc)\n    d = min(max(cmd, -MAX_STEERING_ANGLE), MAX_STEERING_ANGLE)\n    u = GAIN_CMD * d\n    # 2. Backlash: within the play, the tire's self-aligning torque pulls the wheel\n    #    towards its rest position, so it sits at the point of the play range\n    #    [u - BACKLASH_LEFT, u + BACKLASH_RIGHT] closest to REST_POSITION\n    w = min(max(REST_POSITION, u - BACKLASH_LEFT), u + BACKLASH_RIGHT)\n    # 3. Convert back to the wheel angle (characteristic per side)\n    delta = w / (GAIN_LEFT if w >= 0.0 else GAIN_RIGHT)\n    db.outputs.steeringAngleOut = delta\n    db.outputs.wheelAnglesOut = ackermann_wheel_angles(delta)\n    return True\n\n\ndef ackermann_wheel_angles(delta):\n    \"\"\"Left and right wheel angle [rad] for the steering angle delta of the virtual centre wheel.\n\n    The turning centre lies on the rear axle at the signed radius R = WHEEL_BASE / tan(delta)\n    (+ = left). The inner wheel is closer to it and turns more than the outer wheel.\n    \"\"\"\n    if abs(delta) < 1e-9:\n        return [0.0, 0.0]\n    R = WHEEL_BASE / math.tan(delta)\n    left = math.atan(WHEEL_BASE / (R - TRACK_WIDTH / 2))\n    right = math.atan(WHEEL_BASE / (R + TRACK_WIDTH / 2))\n    return [left, right]",
+     "inputs:scriptPath": "",
+     "inputs:usePath": false
+    },
+    "type": "omni.graph.scriptnode.ScriptNode"
+   }
+  },
+  "/Graph_athena/odometry_athena": {
+   "ComputeOdometry": {
+    "connections": {
+     "inputs:execIn": [
+      "/Graph_athena/odometry_athena/OnPlaybackTick.outputs:tick"
+     ]
+    },
+    "inputs": {
+     "inputs:chassisPrim": [
+      "/World/athena/Geometry/base_link"
+     ]
+    },
+    "type": "isaacsim.core.nodes.IsaacComputeOdometry"
+   },
+   "Context": {
+    "connections": {},
+    "inputs": {
+     "inputs:domain_id": 0,
+     "inputs:useDomainIDEnvVar": true
+    },
+    "type": "isaacsim.ros2.bridge.ROS2Context"
+   },
+   "OnPlaybackTick": {
+    "connections": {},
+    "inputs": {},
+    "type": "omni.graph.action.OnPlaybackTick"
+   },
+   "PublisherOdometry": {
+    "connections": {
+     "inputs:angularVelocity": [
+      "/Graph_athena/odometry_athena/ComputeOdometry.outputs:angularVelocity"
+     ],
+     "inputs:context": [
+      "/Graph_athena/odometry_athena/Context.outputs:context"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/odometry_athena/ComputeOdometry.outputs:execOut"
+     ],
+     "inputs:linearVelocity": [
+      "/Graph_athena/odometry_athena/ComputeOdometry.outputs:linearVelocity"
+     ],
+     "inputs:orientation": [
+      "/Graph_athena/odometry_athena/ComputeOdometry.outputs:orientation"
+     ],
+     "inputs:position": [
+      "/Graph_athena/odometry_athena/ComputeOdometry.outputs:position"
+     ],
+     "inputs:timeStamp": [
+      "/Graph_athena/odometry_athena/ReadSimTime.outputs:simulationTime"
+     ]
+    },
+    "inputs": {
+     "inputs:chassisFrameId": "chassis",
+     "inputs:nodeNamespace": "",
+     "inputs:odomFrameId": "odom",
+     "inputs:publishRawVelocities": false,
+     "inputs:qosProfile": "",
+     "inputs:queueSize": 10,
+     "inputs:robotFront": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "inputs:topicName": "/odom"
+    },
+    "type": "isaacsim.ros2.bridge.ROS2PublishOdometry"
+   },
+   "ReadSimTime": {
+    "connections": {},
+    "inputs": {
+     "inputs:referenceTimeDenominator": 0,
+     "inputs:referenceTimeNumerator": 0,
+     "inputs:resetOnStop": false
+    },
+    "type": "isaacsim.core.nodes.IsaacReadSimulationTime"
+   },
+   "TFOdom2Robot": {
+    "connections": {
+     "inputs:context": [
+      "/Graph_athena/odometry_athena/Context.outputs:context"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/odometry_athena/OnPlaybackTick.outputs:tick"
+     ],
+     "inputs:rotation": [
+      "/Graph_athena/odometry_athena/ComputeOdometry.outputs:orientation"
+     ],
+     "inputs:timeStamp": [
+      "/Graph_athena/odometry_athena/ReadSimTime.outputs:simulationTime"
+     ],
+     "inputs:translation": [
+      "/Graph_athena/odometry_athena/ComputeOdometry.outputs:position"
+     ]
+    },
+    "inputs": {
+     "inputs:childFrameId": "base_link",
+     "inputs:nodeNamespace": "",
+     "inputs:parentFrameId": "odom",
+     "inputs:qosProfile": "",
+     "inputs:queueSize": 10,
+     "inputs:staticPublisher": false,
+     "inputs:topicName": "tf"
+    },
+    "type": "isaacsim.ros2.bridge.ROS2PublishRawTransformTree"
+   },
+   "TFRobot": {
+    "connections": {
+     "inputs:context": [
+      "/Graph_athena/odometry_athena/Context.outputs:context"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/odometry_athena/OnPlaybackTick.outputs:tick"
+     ],
+     "inputs:timeStamp": [
+      "/Graph_athena/odometry_athena/ReadSimTime.outputs:simulationTime"
+     ]
+    },
+    "inputs": {
+     "inputs:childFrames": [],
+     "inputs:nodeNamespace": "",
+     "inputs:orientations": [],
+     "inputs:parentFrames": [],
+     "inputs:parentPrim": [
+      "/World/athena/Geometry/base_link"
+     ],
+     "inputs:qosProfile": "",
+     "inputs:queueSize": 10,
+     "inputs:staticPublisher": false,
+     "inputs:targetPrims": [
+      "/World/athena/Geometry/base_link"
+     ],
+     "inputs:topicName": "/tf",
+     "inputs:translations": []
+    },
+    "type": "isaacsim.ros2.bridge.ROS2PublishTransformTree"
+   },
+   "TFWorld2Odom": {
+    "connections": {
+     "inputs:context": [
+      "/Graph_athena/odometry_athena/Context.outputs:context"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/odometry_athena/OnPlaybackTick.outputs:tick"
+     ],
+     "inputs:timeStamp": [
+      "/Graph_athena/odometry_athena/ReadSimTime.outputs:simulationTime"
+     ]
+    },
+    "inputs": {
+     "inputs:childFrameId": "odom",
+     "inputs:nodeNamespace": "",
+     "inputs:parentFrameId": "World",
+     "inputs:qosProfile": "",
+     "inputs:queueSize": 10,
+     "inputs:rotation": [
+      0.0,
+      0.0,
+      -0.9999999776482582,
+      1.0
+     ],
+     "inputs:staticPublisher": false,
+     "inputs:topicName": "tf",
+     "inputs:translation": [
+      1.75,
+      5.25,
+      0.0
+     ]
+    },
+    "type": "isaacsim.ros2.bridge.ROS2PublishRawTransformTree"
+   },
+   "TFWorld2Odom_01": {
+    "connections": {
+     "inputs:context": [
+      "/Graph_athena/odometry_athena/Context.outputs:context"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/odometry_athena/OnPlaybackTick.outputs:tick"
+     ],
+     "inputs:rotation": [
+      "/Graph_athena/odometry_athena/get_rotation_quaternion.outputs:quaternion"
+     ],
+     "inputs:timeStamp": [
+      "/Graph_athena/odometry_athena/ReadSimTime.outputs:simulationTime"
+     ],
+     "inputs:translation": [
+      "/Graph_athena/odometry_athena/get_translation.outputs:translation"
+     ]
+    },
+    "inputs": {
+     "inputs:childFrameId": "back_axle",
+     "inputs:nodeNamespace": "",
+     "inputs:parentFrameId": "chassis",
+     "inputs:qosProfile": "",
+     "inputs:queueSize": 10,
+     "inputs:staticPublisher": false,
+     "inputs:topicName": "tf"
+    },
+    "type": "isaacsim.ros2.bridge.ROS2PublishRawTransformTree"
+   },
+   "TFWorld2Odom_02": {
+    "connections": {
+     "inputs:context": [
+      "/Graph_athena/odometry_athena/Context.outputs:context"
+     ],
+     "inputs:execIn": [
+      "/Graph_athena/odometry_athena/OnPlaybackTick.outputs:tick"
+     ],
+     "inputs:rotation": [
+      "/Graph_athena/odometry_athena/get_rotation_quaternion_01.outputs:quaternion"
+     ],
+     "inputs:timeStamp": [
+      "/Graph_athena/odometry_athena/ReadSimTime.outputs:simulationTime"
+     ],
+     "inputs:translation": [
+      "/Graph_athena/odometry_athena/get_translation_01.outputs:translation"
+     ]
+    },
+    "inputs": {
+     "inputs:childFrameId": "front_axle",
+     "inputs:nodeNamespace": "",
+     "inputs:parentFrameId": "chassis",
+     "inputs:qosProfile": "",
+     "inputs:queueSize": 10,
+     "inputs:staticPublisher": false,
+     "inputs:topicName": "tf"
+    },
+    "type": "isaacsim.ros2.bridge.ROS2PublishRawTransformTree"
+   },
+   "get_rotation_quaternion": {
+    "connections": {
+     "inputs:matrix": [
+      "/Graph_athena/odometry_athena/read_prim_local_transform.outputs:value"
+     ]
+    },
+    "inputs": {
+     "inputs:rotationOrder": "XYZ"
+    },
+    "type": "omni.graph.nodes.GetMatrix4Quaternion"
+   },
+   "get_rotation_quaternion_01": {
+    "connections": {
+     "inputs:matrix": [
+      "/Graph_athena/odometry_athena/read_prim_local_transform_01.outputs:value"
+     ]
+    },
+    "inputs": {
+     "inputs:rotationOrder": "XYZ"
+    },
+    "type": "omni.graph.nodes.GetMatrix4Quaternion"
+   },
+   "get_translation": {
+    "connections": {
+     "inputs:matrix": [
+      "/Graph_athena/odometry_athena/read_prim_local_transform.outputs:value"
+     ]
+    },
+    "inputs": {},
+    "type": "omni.graph.nodes.GetMatrix4Translation"
+   },
+   "get_translation_01": {
+    "connections": {
+     "inputs:matrix": [
+      "/Graph_athena/odometry_athena/read_prim_local_transform_01.outputs:value"
+     ]
+    },
+    "inputs": {},
+    "type": "omni.graph.nodes.GetMatrix4Translation"
+   },
+   "read_prim_local_transform": {
+    "connections": {},
+    "inputs": {
+     "inputs:prim": [
+      "/World/athena/Geometry/base_link/chassis/back_axle"
+     ]
+    },
+    "type": "omni.graph.nodes.ReadPrimLocalTransform"
+   },
+   "read_prim_local_transform_01": {
+    "connections": {},
+    "inputs": {
+     "inputs:prim": [
+      "/World/athena/Geometry/base_link/chassis/front_axle"
+     ]
+    },
+    "type": "omni.graph.nodes.ReadPrimLocalTransform"
+   }
+  }
+ },
+ "usd": {
+  "/PhysicsScene": {
+   "physics:gravityDirection": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:gravityMagnitude": -Infinity,
+   "physxScene:bounceThreshold": 0.0,
+   "physxScene:broadphaseType": "GPU",
+   "physxScene:collisionSystem": "PCM",
+   "physxScene:disableSleeping": false,
+   "physxScene:enableCCD": false,
+   "physxScene:enableEnhancedDeterminism": false,
+   "physxScene:enableExternalForcesEveryIteration": false,
+   "physxScene:enableGPUDynamics": true,
+   "physxScene:enableSceneQuerySupport": true,
+   "physxScene:enableStabilization": false,
+   "physxScene:frictionCorrelationDistance": 0.02500000037252903,
+   "physxScene:frictionOffsetThreshold": 0.03999999910593033,
+   "physxScene:frictionType": "patch",
+   "physxScene:gpuCollisionStackSize": 67108864,
+   "physxScene:gpuFoundLostAggregatePairsCapacity": 1024,
+   "physxScene:gpuFoundLostPairsCapacity": 262144,
+   "physxScene:gpuHeapCapacity": 67108864,
+   "physxScene:gpuMaxDeformableSurfaceContacts": 1048576,
+   "physxScene:gpuMaxDeformableVolumeContacts": 1048576,
+   "physxScene:gpuMaxNumPartitions": 8,
+   "physxScene:gpuMaxParticleContacts": 1048576,
+   "physxScene:gpuMaxRigidContactCount": 524288,
+   "physxScene:gpuMaxRigidPatchCount": 81920,
+   "physxScene:gpuTempBufferCapacity": 16777216,
+   "physxScene:gpuTotalAggregatePairsCapacity": 1024,
+   "physxScene:invertCollisionGroupFilter": false,
+   "physxScene:maxBiasCoefficient": Infinity,
+   "physxScene:maxPositionIterationCount": 255,
+   "physxScene:maxVelocityIterationCount": 255,
+   "physxScene:minPositionIterationCount": 1,
+   "physxScene:minVelocityIterationCount": 0,
+   "physxScene:reportKinematicKinematicPairs": false,
+   "physxScene:reportKinematicStaticPairs": false,
+   "physxScene:solveArticulationContactLast": false,
+   "physxScene:solverType": "TGS",
+   "physxScene:timeStepsPerSecond": 60,
+   "physxScene:updateType": "Synchronous"
+  },
+  "/World/test_track_empty_stage_1/GroundPlane/CollisionPlane": {
+   "physics:collisionEnabled": true,
+   "physics:simulationOwner": []
+  },
+  "<robot>/Geometry/base_link": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999974752427e-07,
+    9.999999974752427e-07,
+    9.999999974752427e-07
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.009999999776482582,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physxArticulation:enabledSelfCollisions": false,
+   "physxArticulation:solverPositionIterationCount": 32,
+   "physxArticulation:solverVelocityIterationCount": 4
+  },
+  "<robot>/Geometry/base_link/chassis": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    -0.1402519941329956,
+    0.07535000145435333
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    0.0030070000793784857,
+    0.017669999971985817,
+    0.018330000340938568
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 3.0,
+   "physics:principalAxes": "(6.123234e-17, 0.70710677, 0.70710677, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.029850000515580177,
+    -0.013100000098347664,
+    0.0
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/spring_damper_lower_part_back_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.01744999922811985
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/spring_damper_lower_part_back_left/spring_damper_upper_part_back_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    -0.01559900026768446
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    -0.006264999974519014,
+    -0.006552000064402819,
+    0.017232999205589294
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left/wheel_back_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    -0.009399999864399433,
+    -1.2000000424450263e-05,
+    1.2000000424450263e-05
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    0.0001140000022132881,
+    0.0001140000022132881,
+    0.0001875000016298145
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.15000000596046448,
+   "physics:principalAxes": "(0.5, 0.5, 0.5, 0.5)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left/wheel_back_left/round_collider": {
+   "physics:collisionEnabled": true,
+   "physics:simulationOwner": [],
+   "physxCollision:contactOffset": 0.0020000000949949026,
+   "physxCollision:minTorsionalPatchRadius": 0.0,
+   "physxCollision:restOffset": 0.0,
+   "physxCollision:torsionalPatchRadius": 0.0
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left/wheel_back_left/wheel_back_left_collision/wheel_back_left_collision": {
+   "physics:approximation": "convexHull",
+   "physics:collisionEnabled": false,
+   "physics:simulationOwner": []
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.029850000515580177,
+    -0.013100000098347664,
+    0.0
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/spring_damper_lower_part_back_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.01744999922811985
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/spring_damper_lower_part_back_right/spring_damper_upper_part_back_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    -0.01559900026768446
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.006264999974519014,
+    -0.006552000064402819,
+    0.017232999205589294
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right/wheel_back_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    -0.009399999864399433,
+    -1.2000000424450263e-05,
+    1.2000000424450263e-05
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    0.0001140000022132881,
+    0.0001140000022132881,
+    0.0001875000016298145
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.15000000596046448,
+   "physics:principalAxes": "(0.5, 0.5, 0.5, 0.5)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right/wheel_back_right/round_collider": {
+   "physics:collisionEnabled": true,
+   "physics:simulationOwner": [],
+   "physxCollision:contactOffset": 0.0020000000949949026,
+   "physxCollision:minTorsionalPatchRadius": 0.0,
+   "physxCollision:restOffset": 0.0,
+   "physxCollision:torsionalPatchRadius": 0.0
+  },
+  "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right/wheel_back_right/wheel_back_right_collision/wheel_back_right_collision": {
+   "physics:approximation": "convexHull",
+   "physics:collisionEnabled": false,
+   "physics:simulationOwner": []
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.028850000351667404,
+    -0.013700000010430813,
+    0.0
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    -0.007249999791383743,
+    -0.004625000059604645,
+    0.01902100071310997
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left/wheel_attachment_front_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.00022899999748915434,
+    0.010999999940395355,
+    0.011500000022351742
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left/wheel_attachment_front_left/wheel_front_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    -0.009399999864399433,
+    -1.2000000424450263e-05,
+    1.2000000424450263e-05
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    0.0001140000022132881,
+    0.0001140000022132881,
+    0.0001875000016298145
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.15000000596046448,
+   "physics:principalAxes": "(0.5, 0.5, 0.5, 0.5)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left/wheel_attachment_front_left/wheel_front_left/round_collider": {
+   "physics:collisionEnabled": true,
+   "physics:simulationOwner": [],
+   "physxCollision:contactOffset": 0.0020000000949949026,
+   "physxCollision:minTorsionalPatchRadius": 0.0,
+   "physxCollision:restOffset": 0.0,
+   "physxCollision:torsionalPatchRadius": 0.0
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left/wheel_attachment_front_left/wheel_front_left/wheel_front_left_collision/wheel_back_left_collision": {
+   "physics:approximation": "convexHull",
+   "physics:collisionEnabled": false,
+   "physics:simulationOwner": []
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/spring_damper_lower_part_front_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.01744999922811985
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/spring_damper_lower_part_front_left/spring_damper_upper_part_front_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    -0.01559900026768446
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.028850000351667404,
+    -0.013700000010430813,
+    0.0
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.007249999791383743,
+    -0.004625000059604645,
+    0.01902100071310997
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right/wheel_attachment_front_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    -0.00022899999748915434,
+    0.010999999940395355,
+    0.011500000022351742
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    2.9999999242136255e-05,
+    2.9999999242136255e-05,
+    2.9999999242136255e-05
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.05000000074505806,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right/wheel_attachment_front_right/wheel_front_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    -0.009399999864399433,
+    -1.2000000424450263e-05,
+    1.2000000424450263e-05
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    0.0001140000022132881,
+    0.0001140000022132881,
+    0.0001875000016298145
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.15000000596046448,
+   "physics:principalAxes": "(0.5, 0.5, 0.5, 0.5)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right/wheel_attachment_front_right/wheel_front_right/round_collider": {
+   "physics:collisionEnabled": true,
+   "physics:simulationOwner": [],
+   "physxCollision:contactOffset": 0.0020000000949949026,
+   "physxCollision:minTorsionalPatchRadius": 0.0,
+   "physxCollision:restOffset": 0.0,
+   "physxCollision:torsionalPatchRadius": 0.0
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right/wheel_attachment_front_right/wheel_front_right/wheel_front_right_collision/wheel_front_right_collision": {
+   "physics:approximation": "convexHull",
+   "physics:collisionEnabled": false,
+   "physics:simulationOwner": []
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/spring_damper_lower_part_front_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.01744999922811985
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/spring_damper_lower_part_front_right/spring_damper_upper_part_front_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    -0.01559900026768446
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_back_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.019950000569224358
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_back_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.019950000569224358
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_front_left": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.02005000039935112
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_front_right": {
+   "physics:angularVelocity": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:centerOfMass": [
+    0.0,
+    0.0,
+    0.02005000039935112
+   ],
+   "physics:density": 0.0,
+   "physics:diagonalInertia": [
+    9.999999747378752e-06,
+    9.999999747378752e-06,
+    9.999999747378752e-06
+   ],
+   "physics:kinematicEnabled": false,
+   "physics:mass": 0.02500000037252903,
+   "physics:principalAxes": "(1, 0, 0, 0)",
+   "physics:rigidBodyEnabled": true,
+   "physics:simulationOwner": [],
+   "physics:startsAsleep": false,
+   "physics:velocity": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "<robot>/Physics/base_link_to_chassis": {
+   "physics:body0": [
+    "<robot>/Geometry/base_link"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.03200000151991844,
+    0.0,
+    -0.017999999225139618
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.7071069, 0, 0, 0.70710665)",
+   "physics:localRot1": "(1, 0, 0, 0)"
+  },
+  "<robot>/Physics/front_wheel_alignment_left_rev": {
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.05534999817609787,
+    -0.0076500000432133675,
+    1.734723475976807e-18
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.999229, -1.1325096e-18, -0.039260384, 1.0468797e-18)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/front_wheel_alignment_right_rev": {
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.05534999817609787,
+    -0.0076500000432133675,
+    1.734723475976807e-18
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(-0.039259735, -1.3199281e-23, 0.999229, -1.7726693e-24)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/lower_back_wheel_suspension_left_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.021250000223517418,
+    -0.01834999956190586,
+    0.007499999832361937
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.9995336, -1.7347235e-18, 0.030538421, 0)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -14.323945045471191,
+   "physics:upperLimit": 14.323945045471191,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/lower_back_wheel_suspension_right_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.021250000223517418,
+    -0.01834999956190586,
+    0.007499999832361937
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.030538578, 1.110223e-16, 0.9995336, 1.5612511e-17)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -14.323945045471191,
+   "physics:upperLimit": 14.323945045471191,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/lower_front_wheel_suspension_left_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.021250000223517418,
+    -0.2778500020503998,
+    0.007499999832361937
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.999229, 0, 0.039260384, -5.551115e-17)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -14.323945045471191,
+   "physics:upperLimit": 14.323945045471191,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/lower_front_wheel_suspension_right_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.021250000223517418,
+    -0.2778500020503998,
+    0.007499999832361937
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.039259735, -5.551115e-17, 0.999229, -6.938894e-18)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -14.323945045471191,
+   "physics:upperLimit": 14.323945045471191,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_lower_part_back_left_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/spring_damper_lower_part_back_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.035349998623132706,
+    0.00570000009611249,
+    1.734723475976807e-18
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.6913326, -0.14852428, -0.17555137, 0.6849683)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -28.647890090942383,
+   "physics:upperLimit": 28.647890090942383,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_lower_part_back_right_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/spring_damper_lower_part_back_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.035349998623132706,
+    0.00570000009611249,
+    -3.469446951953614e-18
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.14852442, -0.69133216, -0.6849686, 0.17555167)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -28.647890090942383,
+   "physics:upperLimit": 28.647890090942383,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_lower_part_front_left_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/spring_damper_lower_part_front_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.035599999129772186,
+    -0.032499998807907104,
+    0.0
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.65846854, -0.25771952, -0.22875232, 0.6690831)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -28.647890090942383,
+   "physics:upperLimit": 28.647890090942383,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_lower_part_front_right_joint": {
+   "drive:angular:physics:damping": 0.0,
+   "drive:angular:physics:maxForce": 100.0,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/spring_damper_lower_part_front_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.035599999129772186,
+    -0.032499998807907104,
+    1.734723475976807e-18
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.25771928, -0.65846825, -0.6690835, 0.22875232)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -28.647890090942383,
+   "physics:upperLimit": 28.647890090942383,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_upper_part_back_left_joint": {
+   "drive:linear:physics:damping": 130.0,
+   "drive:linear:physics:maxForce": 1000.0,
+   "drive:linear:physics:stiffness": 3675.0,
+   "drive:linear:physics:targetPosition": 0.005400000140070915,
+   "drive:linear:physics:targetVelocity": 0.0,
+   "drive:linear:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/spring_damper_lower_part_back_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/spring_damper_lower_part_back_left/spring_damper_upper_part_back_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -3.899999865097925e-05,
+    7.79999973019585e-05,
+    0.060116998851299286
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.7068768, 0.0007835576, -0.70733416, 0.0017055228)",
+   "physics:localRot1": "(0.7072323, 0, -0.70698065, 0.0009537179)",
+   "physics:lowerLimit": -0.00800000037997961,
+   "physics:upperLimit": 0.004000000189989805,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_upper_part_back_right_joint": {
+   "drive:linear:physics:damping": 130.0,
+   "drive:linear:physics:maxForce": 1000.0,
+   "drive:linear:physics:stiffness": 3675.0,
+   "drive:linear:physics:targetPosition": 0.005400000140070915,
+   "drive:linear:physics:targetVelocity": 0.0,
+   "drive:linear:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/spring_damper_lower_part_back_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/spring_damper_lower_part_back_right/spring_damper_upper_part_back_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -3.899999865097925e-05,
+    -7.79999973019585e-05,
+    0.060116998851299286
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.7068767, -0.0007835015, -0.7073343, -0.0017054549)",
+   "physics:localRot1": "(0.7072323, 0, -0.70698065, -0.0009537179)",
+   "physics:lowerLimit": -0.00800000037997961,
+   "physics:upperLimit": 0.004000000189989805,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_upper_part_front_left_joint": {
+   "drive:linear:physics:damping": 184.0,
+   "drive:linear:physics:maxForce": 1000.0,
+   "drive:linear:physics:stiffness": 5197.0,
+   "drive:linear:physics:targetPosition": 0.0044999998062849045,
+   "drive:linear:physics:targetVelocity": 0.0,
+   "drive:linear:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/spring_damper_lower_part_front_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/spring_damper_lower_part_front_left/spring_damper_upper_part_front_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.00013499999477062374,
+    8.800000068731606e-05,
+    0.06061600148677826
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.7078967, -0.00093379867, -0.70631534, 0.0000941316)",
+   "physics:localRot1": "(0.707145, 0, -0.7070678, 0.0010825219)",
+   "physics:lowerLimit": -0.00800000037997961,
+   "physics:upperLimit": 0.004000000189989805,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_damper_upper_part_front_right_joint": {
+   "drive:linear:physics:damping": 184.0,
+   "drive:linear:physics:maxForce": 1000.0,
+   "drive:linear:physics:stiffness": 5197.0,
+   "drive:linear:physics:targetPosition": 0.0044999998062849045,
+   "drive:linear:physics:targetVelocity": 0.0,
+   "drive:linear:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/spring_damper_lower_part_front_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/spring_damper_lower_part_front_right/spring_damper_upper_part_front_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.00013499999477062374,
+    -8.800000068731606e-05,
+    0.06061600148677826
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.7078967, 0.00093379867, -0.70631534, -0.0000941316)",
+   "physics:localRot1": "(0.707145, 0, -0.7070678, -0.0010825219)",
+   "physics:lowerLimit": -0.00800000037997961,
+   "physics:upperLimit": 0.004000000189989805,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/spring_loop_back_left": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/spring_damper_lower_part_back_left/spring_damper_upper_part_back_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.032970063388347626,
+    -0.014799807220697403,
+    0.06060655415058136
+   ],
+   "physics:localPos1": [
+    2.7633928478820735e-10,
+    -2.0802553013510305e-09,
+    1.0732825739268037e-09
+   ],
+   "physics:localRot0": "(0.69554794, -0.12734368, -0.15455142, 0.6900076)",
+   "physics:localRot1": "(1, -7.4761966e-9, 1.4614254e-8, -4.135656e-8)"
+  },
+  "<robot>/Physics/spring_loop_back_right": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/spring_damper_lower_part_back_right/spring_damper_upper_part_back_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.03297004476189613,
+    -0.014799834229052067,
+    0.06060653179883957
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.6900079, 0.15455176, 0.12734357, 0.6955475)",
+   "physics:localRot1": "(1, 0, 0, 0)"
+  },
+  "<robot>/Physics/spring_loop_front_left": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/spring_damper_lower_part_front_left/spring_damper_upper_part_front_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.021250102669000626,
+    -0.30819961428642273,
+    0.05380009859800339
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.66808796, -0.23167235, -0.20230411, 0.6775393)",
+   "physics:localRot1": "(1, 0, 0, 0)"
+  },
+  "<robot>/Physics/spring_loop_front_right": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/spring_damper_lower_part_front_right/spring_damper_upper_part_front_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.021250057965517044,
+    -0.3081996440887451,
+    0.05380010977387428
+   ],
+   "physics:localPos1": [
+    -1.177301012234011e-08,
+    -1.406775140821992e-09,
+    -4.4847253688473643e-10
+   ],
+   "physics:localRot0": "(0.67753947, 0.20230457, 0.23167256, 0.66808754)",
+   "physics:localRot1": "(1, 1.7923831e-8, 1.909992e-8, 2.6569985e-8)"
+  },
+  "<robot>/Physics/upper_wheel_suspension_back_left_loop": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_back_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.0,
+    0.0,
+    0.039900001138448715
+   ],
+   "physics:localPos1": [
+    0.014119239524006844,
+    -0.013343016617000103,
+    0.036363109946250916
+   ],
+   "physics:localRot0": "(1, 0, 0, 0)",
+   "physics:localRot1": "(1, 0, 0, 0)"
+  },
+  "<robot>/Physics/upper_wheel_suspension_back_left_rev": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_back_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.024860000237822533,
+    -0.03799999877810478,
+    0.04257199913263321
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(-0.48032737, 0.50615937, 0.519587, -0.49306968)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/upper_wheel_suspension_back_right_loop": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_back_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.0,
+    0.0,
+    0.039900001138448715
+   ],
+   "physics:localPos1": [
+    -0.014119243249297142,
+    -0.013343041762709618,
+    0.03636309504508972
+   ],
+   "physics:localRot0": "(1, 0, 0, 0)",
+   "physics:localRot1": "(1, 0, 0, 0)"
+  },
+  "<robot>/Physics/upper_wheel_suspension_back_right_rev": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_back_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.024860000237822533,
+    -0.03799999877810478,
+    0.04257199913263321
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.49306986, 0.5195871, 0.5061592, 0.48032722)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/upper_wheel_suspension_front_left_loop": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_front_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.0,
+    0.0,
+    0.039900001138448715
+   ],
+   "physics:localPos1": [
+    -0.011730119585990906,
+    0.0025878779124468565,
+    0.03871840983629227
+   ],
+   "physics:localRot0": "(1, 0, 0, 0)",
+   "physics:localRot1": "(1, 0, 0, 0)"
+  },
+  "<robot>/Physics/upper_wheel_suspension_front_left_rev": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_front_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.024860000237822533,
+    -0.2849999964237213,
+    0.04257199913263321
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.48247406, 0.49096936, 0.5173736, 0.5084215)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/upper_wheel_suspension_front_right_loop": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_front_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:coneAngle0Limit": -1.0,
+   "physics:coneAngle1Limit": -1.0,
+   "physics:excludeFromArticulation": true,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.0,
+    0.0,
+    0.039900001138448715
+   ],
+   "physics:localPos1": [
+    0.011730124242603779,
+    0.00258786347694695,
+    0.0387183353304863
+   ],
+   "physics:localRot0": "(1, 0, 0, 0)",
+   "physics:localRot1": "(1, 0, 0, 0)"
+  },
+  "<robot>/Physics/upper_wheel_suspension_front_right_rev": {
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/upper_wheel_suspension_front_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.024860000237822533,
+    -0.2849999964237213,
+    0.04257199913263321
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(-0.50842136, 0.51737356, 0.49096945, -0.48247415)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/wheel_attachment_back_left_rev": {
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.057349998503923416,
+    -0.007350000087171793,
+    1.734723475976807e-18
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.99965733, -3.945315e-20, -0.026176646, 1.8111264e-18)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/wheel_attachment_back_right_rev": {
+   "physics:axis": "Y",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.057349998503923416,
+    -0.007350000087171793,
+    -1.734723475976807e-18
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(-0.026176836, 1.0826486e-26, 0.99965733, 5.168816e-25)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -20.0,
+   "physics:upperLimit": 20.0
+  },
+  "<robot>/Physics/wheel_attachment_front_left_joint": {
+   "drive:angular:physics:damping": 0.009999999776482582,
+   "drive:angular:physics:maxForce": 2.0,
+   "drive:angular:physics:stiffness": 10.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "Z",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left/wheel_attachment_front_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.0035000001080334187,
+    -0.006426000036299229,
+    0.0034660000819712877
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.99806756, -0.06213815, 7.632783e-17, -5.4002056e-17)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -34.37746810913086,
+   "physics:upperLimit": 34.37746810913086,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/wheel_attachment_front_right_joint": {
+   "drive:angular:physics:damping": 0.009999999776482582,
+   "drive:angular:physics:maxForce": 2.0,
+   "drive:angular:physics:stiffness": 10.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "Z",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right/wheel_attachment_front_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.0035000001080334187,
+    -0.006409000139683485,
+    0.0034660000819712877
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.99806756, -0.06213815, 0, -7.556056e-17)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -34.37746810913086,
+   "physics:upperLimit": 34.37746810913086,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/wheel_back_left_joint": {
+   "drive:angular:physics:damping": 0.009999999776482582,
+   "drive:angular:physics:maxForce": 0.30000001192092896,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_left/wheel_attachment_back_left/wheel_back_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.014800000004470348,
+    -0.006550000049173832,
+    0.014000000432133675
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(1, 0, 0, 0)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -Infinity,
+   "physics:upperLimit": Infinity,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/wheel_back_right_joint": {
+   "drive:angular:physics:damping": 0.009999999776482582,
+   "drive:angular:physics:maxForce": 0.30000001192092896,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_back_wheel_suspension_right/wheel_attachment_back_right/wheel_back_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.014800000004470348,
+    -0.006550000049173832,
+    0.014000000432133675
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(-4.3368087e-19, 1, -1.7320511e-7, -8.6736174e-19)",
+   "physics:localRot1": "(0, 0, -1, 0)",
+   "physics:lowerLimit": -Infinity,
+   "physics:upperLimit": Infinity,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/wheel_front_left_joint": {
+   "drive:angular:physics:damping": 0.009999999776482582,
+   "drive:angular:physics:maxForce": 0.30000001192092896,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left/wheel_attachment_front_left"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_left/front_wheel_alignment_left/wheel_attachment_front_left/wheel_front_left"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    0.020999999716877937,
+    0.0,
+    0.011500000022351742
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(0.99806756, 0.06213815, -7.632783e-17, 5.4002056e-17)",
+   "physics:localRot1": "(1, 0, 0, 0)",
+   "physics:lowerLimit": -Infinity,
+   "physics:upperLimit": Infinity,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  },
+  "<robot>/Physics/wheel_front_right_joint": {
+   "drive:angular:physics:damping": 0.009999999776482582,
+   "drive:angular:physics:maxForce": 0.30000001192092896,
+   "drive:angular:physics:stiffness": 0.0,
+   "drive:angular:physics:targetPosition": 0.0,
+   "drive:angular:physics:targetVelocity": 0.0,
+   "drive:angular:physics:type": "force",
+   "physics:axis": "X",
+   "physics:body0": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right/wheel_attachment_front_right"
+   ],
+   "physics:body1": [
+    "<robot>/Geometry/base_link/chassis/lower_front_wheel_suspension_right/front_wheel_alignment_right/wheel_attachment_front_right/wheel_front_right"
+   ],
+   "physics:breakForce": Infinity,
+   "physics:breakTorque": Infinity,
+   "physics:collisionEnabled": false,
+   "physics:excludeFromArticulation": false,
+   "physics:jointEnabled": true,
+   "physics:localPos0": [
+    -0.020999999716877937,
+    5.0999999075429514e-05,
+    0.011688999831676483
+   ],
+   "physics:localPos1": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "physics:localRot0": "(-0.062138442, 0.99806756, -1.7287039e-7, 1.0762696e-8)",
+   "physics:localRot1": "(0, 0, -1, 0)",
+   "physics:lowerLimit": -Infinity,
+   "physics:upperLimit": Infinity,
+   "physxJoint:armature": 0.0,
+   "physxJoint:jointFriction": 0.0,
+   "physxJoint:maxJointVelocity": Infinity
+  }
+ }
+}
